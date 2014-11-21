@@ -9,11 +9,7 @@ from libpy import RGBcolor as RGB
 
 
 def stim(stim):
-#     ret = np.zeros([stim.shape[0], stim.shape[1], 3], dtype=int)
-#     ret[:, :, 0] = stim[:, :]
-#     ret[:, :, 1] = stim[:, :]
-#     ret[:, :, 2] = stim[:, :]
-    ret = (stim[:, :, np.newaxis] * np.ones((1, 1, 3))).astype(int)
+    ret = (stim[:, :, np.newaxis] * np.ones((1, 1, 3)) * 255).astype(int)
     return ret
 
 def creation_stimulus(info, screen):
@@ -21,14 +17,15 @@ def creation_stimulus(info, screen):
     from libpy import lena
 
     if (info[figure] == 1):
-        stimulus = (np.random.rand(info[NS_X], info[NS_Y]) > .5) * 255
+        stimulus = (np.random.rand(info[NS_X], info[NS_Y]) > .5)
     elif (info[figure] == 2):
         stimulus = lena()
         stimulus = np.rot90(np.fliplr(stimulus))
+        stimulus = mc.rectif(stimulus, contrast=1.)
     else:
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
         cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft))
-        cloud = mc.rectif(cloud, contrast=1.) * 255
+        cloud = mc.rectif(cloud, contrast=1.)
         stimulus = cloud[:, :, 0]
     return (stimulus)
 
@@ -47,13 +44,16 @@ def winblit(img, win, info):
 
 def presentStimulus(win, stimulus, param, info):
     import time
-
+    from NeuroTools.parameters import ParameterSet
+    from SLIP import Image
+    pe = ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.'})
+    im = Image(pe)
     if (stimulus.ndim == 3):
         img1 = stim(stimulus[:, :, 0])
-        img2 = stim(np.roll(stimulus[:, :, 0], param.shift, 1))
+        img2 = stim(im.translate(stimulus[:, :, 0], [param.shift, 0]))# np.roll(stimulus[:, :, 0], param.shift, 1))
     else:
         img1 = stim(stimulus)
-        img2 = stim(np.roll(stimulus, param.shift, 0))
+        img2 = stim(im.translate(stimulus, [param.shift, 0]))# np.roll(stimulus, param.shift, 0))
 
     if param.contrast == -1:
         img2 = 255 - img2
@@ -76,7 +76,7 @@ def get_reponse(win):
 class parameters:
     def __init__(self, shift_range):
         self.contrast = lb.toss()
-        self.shift = lb.toss() * np.random.randint(shift_range)
+        self.shift = np.random.randn() * shift_range
 
 def trials(win, info):
     import time
@@ -91,9 +91,10 @@ def trials(win, info):
         ans = get_reponse(win)
         t1 = time.time()
         delay = t1 - t0
+        print t0, t1, delay
         results[0, i_trial] = ans
         results[1, i_trial] = param.contrast
         results[2, i_trial] = param.shift
         results[3, i_trial] = delay
-        print "essai numero %d, contrast = %d, shift = %d, answer = %d, delay = %d" % (i_trial, param.contrast, param.shift, ans, delay)
+        print "essai numero %d, contrast = %d, shift = %f, answer = %d, delay = %f" % (i_trial, param.contrast, param.shift, ans, delay)
     return(results)
