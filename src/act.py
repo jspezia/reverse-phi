@@ -101,7 +101,6 @@ def trials(win, info):
         ans = get_reponse(win)
         t1 = time.time()
         delay = t1 - t0
-        print t0, t1, delay
         results[0, i_trial] = ans
         results[1, i_trial] = param.contrast
         results[2, i_trial] = param.shift
