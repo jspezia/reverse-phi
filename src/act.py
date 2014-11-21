@@ -10,10 +10,11 @@ from libpy import RGBcolor as RGB
 
 def stim(stim):
     ret = np.zeros([stim.shape[0], stim.shape[1], 3], dtype=int)
-    ret[:, :, 0] = stim[:, :]
-    ret[:, :, 1] = stim[:, :]
-    ret[:, :, 2] = stim[:, :]
-    return(ret)
+#     ret[:, :, 0] = stim[:, :]
+#     ret[:, :, 1] = stim[:, :]
+#     ret[:, :, 2] = stim[:, :]
+    ret = stim[:, :, np.newaxis].astype(int)
+    return ret
 
 def creation_stimulus(info, screen):
     import MotionClouds as mc
