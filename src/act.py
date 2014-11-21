@@ -1,3 +1,5 @@
+### act.py ###
+
 from tools import *
 from pygame.locals import *
 import pygame
@@ -11,75 +13,82 @@ def stim(stim):
     ret[:, :, 0] = stim[:, :]
     ret[:, :, 1] = stim[:, :]
     ret[:, :, 2] = stim[:, :]
-    print ret
     return(ret)
 
 def creation_stimulus(info, screen):
-    from MotionClouds import envelope_gabor, random_cloud
-    from numpy import rot90
-    from numpy.random import rand
-    from pygame import surfarray
-    from pygame import transform
+    import MotionClouds as mc
+    from libpy import lena
 
-    ret = np.zeros([info[N_X], info[N_Y], 3], dtype=int)
     if (info[figure] == 1):
-        stimulus = stim((rand(64, 64) > .5)) * 255
+        stimulus = (np.random.rand(info[NS_X], info[NS_Y]) > .5) * 255
     elif (info[figure] == 2):
         stimulus = lena()
-        stimulus = stim(rot90(stimulus, 2))
-#    else:
-#        fx, fy, ft = mc.get_grids(info[N_X], info[N_Y], info[N_frame])
-#        env = envelope_gabor(fx, fy, ft)
-#        mov = random_cloud(env)
-#        mov = rot90(mov)
-#        stimulus = mov[:, :, info[N_frame]/2]
-    surface = pygame.Surface(stimulus.shape[:2])
-    surfarray.blit_array(surface, stimulus)
+        stimulus = np.rot90(np.fliplr(stimulus))
+    else:
+        fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
+        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft))
+        cloud = mc.rectif(cloud, contrast=1.) * 255
+        stimulus = cloud[:, :, 0]
+    return (stimulus)
+
+def winblit(img, win, info):
+    from pygame import transform
+    from pygame import surfarray
+
+    surface = pygame.Surface(img.shape[:2])
+    surfarray.blit_array(surface, img)
     surface = transform.scale(surface, (info[N_X], info[N_Y]))
     x = (info[screen_width] - info[N_X]) / 2
     y = (info[screen_height] - info[N_Y]) / 2
-    screen.blit(surface, (x, y))
-    looping = True
-    rep = 0
-    while looping:
-        pygame.display.flip()
-        event = pygame.event.poll()
-        looping = quit(event)
-        rep = reponse(event)
-        if (rep != 0): looping = False
-        print rep
-    return(stimulus)
+    win.screen.blit(surface, (x, y))
+    pygame.display.flip()
+    time.sleep(info[duration_image])
 
+def presentStimulus(win, stimulus, param, info):
+    import time
 
-
-def presentStimulus(win, stimulus, contrast, shift):
+    if (stimulus.ndim == 3):
+        img1 = stim(stimulus[:, :, 0])
+        img2 = stim(np.roll(stimulus[:, :, 0], param.shift, 1) * param.contrast)
+    else:
+        img1 = stim(stimulus)
+        img2 = stim(np.roll(stimulus, param.shift, 0) * param.contrast)
     win.background.fill(RGB.Gray)
     win.screen.blit(win.background, (0, 0))
-    looping = True
-    print 'presentStimulus'
-#    while looping:
-#        pygame.display.flip()
-#        event = pygame.event.poll()
-#        looping = quit(event)
-#        if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_RETURN):
-#            looping = False
-    return
+    winblit(img1, win, info)
+    winblit(img2, win, info)
+
+def get_reponse(win):
+    win.background.fill(RGB.Gray)
+    win.screen.blit(win.background, (0, 0))
+    pygame.display.flip()
+    ans = 0
+    while (ans == 0):
+        event = pygame.event.poll()
+        ans = reponse(event)
+    return (ans)
+
+class parameters:
+    def __init__(self, shift_range):
+        self.contrast = lb.toss()
+        self.shift = lb.toss() * np.random.randint(shift_range)
 
 def trials(win, info):
-    from numpy import zeros
-    from numpy.random import randint
+    import time
 
     stimulus = creation_stimulus(info, win.screen)
-    results = zeros((3, info[nTrials]))
+    results = np.zeros((4, info[nTrials]))
     for i_trial in range(info[nTrials]):
-        contrast = lb.toss()
-        shift = lb.toss() * randint(info[shift_range])
-        wait(win)
-        presentStimulus(win, stimulus, contrast, shift)
-#        wait_for_response.draw()
-#        win.flip()
-#        ans = getResponse()
-#        results[0, i_trial] = ans
-        results[1, i_trial] = contrast
-        results[2, i_trial] = shift
+        param = parameters(info[shift_range])
+        wait(win, info[wait_stimulus])
+        presentStimulus(win, stimulus, param, info)
+        t0 = time.time()
+        ans = get_reponse(win)
+        t1 = time.time()
+        delay = t1 - t0
+        results[0, i_trial] = ans
+        results[1, i_trial] = param.contrast
+        results[2, i_trial] = param.shift
+        results[3, i_trial] = delay
+        print "essai numero %d, contrast = %d, shift = %d, answer = %d, delay = %d" % (i_trial, param.contrast, param.shift, ans, delay)
     return(results)

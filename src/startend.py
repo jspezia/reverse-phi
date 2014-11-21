@@ -1,3 +1,5 @@
+### startend.py ###
+
 from tools import *
 from pygame.locals import *
 import pygame
@@ -12,14 +14,12 @@ def textedit(background, line, num):
     return (background)
 
 def intro(win, experiment):
-    print 'toto'
     win.background = textedit(win.background, experiment, 1)
     win.background = textedit(win.background, 'For each tries, you need to determine which way the presented image has moved.', 3)
     win.background = textedit(win.background, 'Use the arrow keys (left and right) to make your choice.', 4)
     win.background = textedit(win.background, 'press enter to start the experience', 6)
     win.screen.blit(win.background, (0, 0))
     looping = True
-    print 'toto01'
     while looping:
         pygame.display.flip()
         event = pygame.event.poll()
@@ -28,7 +28,6 @@ def intro(win, experiment):
             looping = False
     win.background.fill(RGB.Gray)
     win.screen.blit(win.background, (0, 0))
-    print 'toto02'
     return
 
 def end(win):
@@ -41,6 +40,6 @@ def end(win):
     while looping:
         pygame.display.flip()
         event = pygame.event.poll()
-        looping = quit(event)
+        looping = quit(event, option=1)
     return
 
