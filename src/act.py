@@ -6,6 +6,8 @@ import pygame
 import libpy as lb
 import numpy as np
 from libpy import RGBcolor as RGB
+from NeuroTools.parameters import ParameterSet
+from SLIP import Image
 
 
 def stim(stim):
@@ -27,6 +29,7 @@ def creation_stimulus(info, screen):
         cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft))
         cloud = mc.rectif(cloud, contrast=1.)
         stimulus = cloud[:, :, 0]
+
     return (stimulus)
 
 def winblit(img, win, info):
@@ -42,10 +45,8 @@ def winblit(img, win, info):
     pygame.display.flip()
     time.sleep(info[duration_image])
 
-def presentStimulus(win, stimulus, param, info):
+def presentStimulus(win, stimulus, param, info, do_mask=True):
     import time
-    from NeuroTools.parameters import ParameterSet
-    from SLIP import Image
     pe = ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.'})
     im = Image(pe)
     if (stimulus.ndim == 3):
@@ -57,6 +58,13 @@ def presentStimulus(win, stimulus, param, info):
 
     if param.contrast == -1:
         img2 = 255 - img2
+
+    if do_mask:
+        pe = ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.'})
+        im = Image(pe)
+        mask = im.mask[:, :, np.newaxis] 
+        img1 = ((img1 - 127)*mask + 127).astype(int)
+        img2 = ((img2 - 127)*mask + 127).astype(int)
 
     win.background.fill(RGB.Gray)
     win.screen.blit(win.background, (0, 0))
