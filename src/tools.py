@@ -91,11 +91,11 @@ def Dlg():
     N_Y = 512
     NS_X = 512
     NS_Y = 512
-    nTrials = 2
+    nTrials = 10
     figure = 2
-    wait_stimulus = 0.5
-    duration_image = 1
-    shift_range = 20
+    wait_stimulus = 0.1
+    duration_image = .2
+    shift_range = 20.
     myDlg = psy.Dlg(title="Reverse-phi's experiment")
     myDlg.addText('Subject Info')
     myDlg.addField('observer', observer)

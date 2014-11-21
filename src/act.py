@@ -14,13 +14,13 @@ def stim(stim):
     ret = (stim[:, :, np.newaxis] * np.ones((1, 1, 3)) * 255).astype(int)
     return ret
 
-def creation_stimulus(info, screen):
+def creation_stimulus(info, screen, param):
     import MotionClouds as mc
     from libpy import lena
 
-    if (info[figure] == 1):
+    if (param.figure == 1):
         stimulus = (np.random.rand(info[NS_X], info[NS_Y]) > .5)
-    elif (info[figure] == 2):
+    elif (param.figure == 2):
         stimulus = lena()
         stimulus = np.rot90(np.fliplr(stimulus))
         stimulus = mc.rectif(stimulus, contrast=1.)
@@ -85,14 +85,15 @@ class parameters:
     def __init__(self, shift_range):
         self.contrast = lb.toss()
         self.shift = np.random.randn() * shift_range
+        self.figure = np.random.randint(3) + 1
 
 def trials(win, info):
     import time
 
-    stimulus = creation_stimulus(info, win.screen)
-    results = np.zeros((4, info[nTrials]))
+    results = np.zeros((5, info[nTrials]))
     for i_trial in range(info[nTrials]):
         param = parameters(info[shift_range])
+        stimulus = creation_stimulus(info, win.screen, param)
         wait(win, info[wait_stimulus])
         presentStimulus(win, stimulus, param, info)
         t0 = time.time()
@@ -104,5 +105,6 @@ def trials(win, info):
         results[1, i_trial] = param.contrast
         results[2, i_trial] = param.shift
         results[3, i_trial] = delay
-        print "essai numero %d, contrast = %d, shift = %f, answer = %d, delay = %f" % (i_trial, param.contrast, param.shift, ans, delay)
+        results[4, i_trial] = param.figure
+        print "essai numero %d, figure %d, contrast = %d, shift = %f, answer = %d, delay = %f" % (i_trial, param.figure, param.contrast, param.shift, ans, delay)
     return(results)
