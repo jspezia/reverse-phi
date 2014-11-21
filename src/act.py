@@ -50,10 +50,14 @@ def presentStimulus(win, stimulus, param, info):
 
     if (stimulus.ndim == 3):
         img1 = stim(stimulus[:, :, 0])
-        img2 = stim(np.roll(stimulus[:, :, 0], param.shift, 1) * param.contrast)
+        img2 = stim(np.roll(stimulus[:, :, 0], param.shift, 1))
     else:
         img1 = stim(stimulus)
-        img2 = stim(np.roll(stimulus, param.shift, 0) * param.contrast)
+        img2 = stim(np.roll(stimulus, param.shift, 0))
+
+    if param.contrast == -1:
+        img2 = 255 - img2
+
     win.background.fill(RGB.Gray)
     win.screen.blit(win.background, (0, 0))
     winblit(img1, win, info)
