@@ -2,7 +2,7 @@ from src import *
 from libpy import RGBcolor as RGB
 from numpy import save
 
-experiment = 'Reverse-phi experiment'
+experiment = 'Reverse-phi-experiment'
 
 info = Dlg()
 fileName = fileSave(experiment, info[observer], info)
