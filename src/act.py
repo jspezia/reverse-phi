@@ -14,12 +14,13 @@ def stim(stim):
     ret = (stim[:, :, np.newaxis] * np.ones((1, 1, 3)) * 255).astype(int)
     return ret
 
-def creation_stimulus(info, screen, param, name_database='Yelmo'):
+def creation_stimulus(info, screen, param, name_database='blackwhite'):
     import MotionClouds as mc
-    from libpy import lena
+#   from libpy import lena
 
     if (param.figure == 1):
         stimulus = (np.random.rand(info[NS_X], info[NS_Y]) > .5)
+#        stimulus = (np.random.rand(64, 64) > .5)
     elif (param.figure == 2):
         im = Image(ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.', 'datapath':'database/', 'do_mask':False, 'seed':None}))
         stimulus, filename, croparea = im.patch(name_database)
@@ -53,17 +54,17 @@ def presentStimulus(win, stimulus, param, info, do_mask=True):
     im = Image(pe)
     if (stimulus.ndim == 3):
         img1 = stim(stimulus[:, :, 0])
-        img2 = stim(im.translate(stimulus[:, :, 0], [param.shift, 0]))# np.roll(stimulus[:, :, 0], param.shift, 1))
+        img2 = stim(im.translate(stimulus[:, :, 0], [param.shift, 0]))
     else:
         img1 = stim(stimulus)
-        img2 = stim(im.translate(stimulus, [param.shift, 0]))# np.roll(stimulus, param.shift, 0))
+        img2 = stim(im.translate(stimulus, [param.shift, 0]))
 
     if param.contrast == -1:
         img2 = 255 - img2
 
     if do_mask:
         im = Image(ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.'}))
-        mask = im.mask[:, :, np.newaxis] 
+        mask = im.mask[:, :, np.newaxis]
         img1 = ((img1 - 127)*mask + 127).astype(int)
         img2 = ((img2 - 127)*mask + 127).astype(int)
 

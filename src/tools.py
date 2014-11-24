@@ -15,10 +15,9 @@ N_Y = 4
 NS_X = 5
 NS_Y = 6
 nTrials = 7
-figure = 8
-wait_stimulus = 9
-duration_image = 10
-shift_range = 11
+wait_stimulus = 8
+duration_image = 9
+shift_range = 10
 
 class win:
     def __init__(self, background, screen):
@@ -109,11 +108,6 @@ def Dlg():
     myDlg.addField('NS_X', NS_X)
     myDlg.addField('NS_Y', NS_Y)
     myDlg.addField('nTrials', nTrials)
-    myDlg.addText('Stimulus\'s figure')
-    myDlg.addText('1- Pictogramm')
-    myDlg.addText('2- Lena')
-    myDlg.addText('3- MotionClouds')
-    myDlg.addField('figure', figure)
     myDlg.addText('time data')
     myDlg.addField('wait_stimulus', wait_stimulus)
     myDlg.addField('duration_image', duration_image)
