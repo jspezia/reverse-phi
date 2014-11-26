@@ -11,5 +11,5 @@ startend.intro(window, experiment)
 results = act.trials(window, info)
 startend.end(window)
 print 'end of experience'
-save(fileName, results)
+saveResults(fileName, results, ext='.csv')
 #analyse(results)

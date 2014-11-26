@@ -35,9 +35,26 @@ def init(info, experiment):
     window = win(background, screen)
     return (window)
 
+def saveResults(fileName, results, ext='.csv'):
+    if (ext == '.pickle'):
+        import numpy
+        numpy.save((fileName + '.pickle'), results)
+        return
+    import pandas as pd
+
+    ans = results[0][:]
+    contrast = results[1][:]
+    shift = results[2][:]
+    delay = results[3][:]
+    figure = results[4][:]
+    Pd_results = zip(ans, contrast, shift, delay, figure)
+    df = pd.DataFrame(data = Pd_results, columns=['ans', 'contrast', 'shift', 'delay', 'figure'])
+    df.to_csv((fileName + '.csv'), index=False, header=True)
+
 def fileSave(experiment, observer, info):
     """
-    save as 'experiment_observer_00_Jan_00h00.pickle'
+    save info as 'experiment_observer_00_Jan_00h00.npy'
+    and return a fileName without .ext
     """
     import time
     import sys
