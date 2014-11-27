@@ -14,7 +14,7 @@ def stim(stim):
     ret = (stim[:, :, np.newaxis] * np.ones((1, 1, 3)) * 255).astype(int)
     return ret
 
-def creation_stimulus(info, screen, param, name_database='Yelmo'):
+def creation_stimulus(info, screen, param, name_database='blackwhite'):
     import MotionClouds as mc
 #   from libpy import lena
 
