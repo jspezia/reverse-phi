@@ -14,7 +14,7 @@ def stim(stim):
     ret = (stim[:, :, np.newaxis] * np.ones((1, 1, 3)) * 255).astype(int)
     return ret
 
-def creation_stimulus(info, screen, param, name_database='blackwhite'):
+def creation_stimulus(info, screen, param, name_database='Yelmo'):
     import MotionClouds as mc
 #   from libpy import lena
 
@@ -28,11 +28,11 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
         stimulus = np.rot90(np.fliplr(stimulus))
         stimulus = mc.rectif(stimulus, contrast=1.)
     else:
-        #a = np.pi/2, np.pi/8, np.pi/32
+        b = [np.pi/2, np.pi/8, np.pi/32]
         #b = a[param.figure - 3]
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
-        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft))
-        #cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, B_theta=b))
+        #cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft))
+        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, B_theta=b[param.figure-3], B_V=1000.))
         cloud = mc.rectif(cloud, contrast=1.)
         stimulus = cloud[:, :, 0]
 
