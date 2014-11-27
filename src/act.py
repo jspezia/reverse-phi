@@ -28,8 +28,11 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
         stimulus = np.rot90(np.fliplr(stimulus))
         stimulus = mc.rectif(stimulus, contrast=1.)
     else:
+        #a = np.pi/2, np.pi/8, np.pi/32
+        #b = a[param.figure - 3]
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
         cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft))
+        #cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, B_theta=b))
         cloud = mc.rectif(cloud, contrast=1.)
         stimulus = cloud[:, :, 0]
 
@@ -87,7 +90,7 @@ class parameters:
     def __init__(self, shift_range):
         self.contrast = lb.toss()
         self.shift = np.random.randn() * shift_range
-        self.figure = np.random.randint(3) + 1
+        self.figure = np.random.randint(5) + 1
 
 def trials(win, info):
     import time
