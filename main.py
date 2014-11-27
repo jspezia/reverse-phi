@@ -5,11 +5,11 @@ from numpy import save
 experiment = 'Reverse-phi-experiment'
 
 info = Dlg()
-fileName = fileSave(experiment, info[observer], info)
+#fileName = fileSave(experiment, info[observer], info)
 window = tools.init(info, experiment)
 startend.intro(window, experiment)
 results = act.trials(window, info)
 startend.end(window)
 print 'end of experience'
-saveResults(fileName, results, ext='.csv')
+#saveResults(fileName, results, ext='.csv')
 #analyse(results)
