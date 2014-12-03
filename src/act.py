@@ -89,7 +89,7 @@ def get_reponse(win):
 class parameters:
     def __init__(self, shift_range):
         self.contrast = lb.toss()
-        self.shift = np.random.randn() * shift_range
+        self.shift = (np.random.rand()*2 - 1) * shift_range
         self.figure = np.random.randint(5) + 1
 
 def trials(win, info):
