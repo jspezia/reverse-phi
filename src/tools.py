@@ -36,9 +36,9 @@ def init(info, experiment):
     return (window)
 
 def saveResults(fileName, results, ext='.csv'):
-    if (ext == '.pickle'):
+    if (ext == '.npy'):
         import numpy
-        numpy.save((fileName + '.pickle'), results)
+        numpy.save((fileName + '.npy'), results)
         return
     import pandas as pd
 
@@ -61,8 +61,9 @@ def fileSave(experiment, observer, info):
 
     info_time = {}
     info_time['timeStr'] = time.strftime("%d_%b_%Hh%M", time.localtime())
-    fileName = experiment + '_' + observer + '_' + info_time['timeStr']
-    fileName = psy.fileSaveDlg(initFilePath = "", initFileName = fileName)
+    dirName = 'ALL/'
+    fileName = dirName + experiment + '_' + observer + '_' + info_time['timeStr']
+    #fileName = psy.fileSaveDlg(initFilePath = "", initFileName = fileName)
     if not isinstance(fileName, unicode):
         sys.exit()
     psy.toFile((fileName + '.pickle'), info)
