@@ -76,7 +76,7 @@ def presentStimulus(win, stimulus, param, info, do_mask=True):
         img1 = stim(stimulus)
         img2 = stim(im.translate(stimulus, [param.shift, 0]))
 
-    if param.toss == -1:
+    if param.flip == -1:
         img2 = 255 - img2
 
     if do_mask:
@@ -102,7 +102,7 @@ def get_reponse(win):
 
 class parameters():
     def __init__(self, exp):#, shift_range):
-        self.toss = lb.toss()
+        self.flip = lb.toss()
 #         self.shift = (np.random.rand()*2 - 1) * shift_range
         self.shift = 0
         if (exp == 'default'):
@@ -132,9 +132,9 @@ def trials(win, info, exp):
         t1 = time.time()
         delay = t1 - t0
         results[0, i_trial] = ans
-        results[1, i_trial] = param.toss
+        results[1, i_trial] = param.flip
         results[2, i_trial] = param.shift
         results[3, i_trial] = delay
         results[4, i_trial] = param.condition
-        print "essai numero %d, condition %d, toss = %d, shift = %f, answer = %d, delay = %f" % (i_trial, param.condition, param.toss, param.shift, ans, delay)
+        print "essai numero %d, condition %d, flip = %d, shift = %f, answer = %d, delay = %f" % (i_trial, param.condition, param.flip, param.shift, ans, delay)
     return(results)
