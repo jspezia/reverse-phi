@@ -87,17 +87,18 @@ def get_reponse(win):
     return (ans)
 
 class parameters:
-    def __init__(self, shift_range):
+    def __init__(self):#, shift_range):
         self.contrast = lb.toss()
-        self.shift = (np.random.rand()*2 - 1) * shift_range
+#         self.shift = (np.random.rand()*2 - 1) * shift_range
         self.figure = np.random.randint(5) + 1
 
 def trials(win, info):
     import time
-
+    shifts = np.linspace(-shift_range, shift_range, info[nTrials])
+    shifts = np.random.permutation(shifts)
     results = np.zeros((5, info[nTrials]))
     for i_trial in range(info[nTrials]):
-        param = parameters(info[shift_range])
+        param = parameters()#info[shift_range])
         stimulus = creation_stimulus(info, win.screen, param)
         wait(win, info[wait_stimulus])
         presentStimulus(win, stimulus, param, info)
@@ -107,7 +108,7 @@ def trials(win, info):
         delay = t1 - t0
         results[0, i_trial] = ans
         results[1, i_trial] = param.contrast
-        results[2, i_trial] = param.shift
+        results[2, i_trial] = shifts[i_trial]
         results[3, i_trial] = delay
         results[4, i_trial] = param.figure
         print "essai numero %d, figure %d, contrast = %d, shift = %f, answer = %d, delay = %f" % (i_trial, param.figure, param.contrast, param.shift, ans, delay)
