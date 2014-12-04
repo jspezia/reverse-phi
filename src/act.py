@@ -115,7 +115,8 @@ class parameters():
 
 def trials(win, info, exp):
     import time
-    shifts = np.linspace(-shift_range, shift_range, info[nTrials])
+    shift_r = info[shift_range]
+    shifts = np.linspace(-shift_r, shift_r, info[nTrials])
     shifts = np.random.permutation(shifts)
     results = np.zeros((5, info[nTrials]))
     for i_trial in range(info[nTrials]):
