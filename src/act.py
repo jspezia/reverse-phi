@@ -20,10 +20,10 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
 
 #   from libpy import lena
 
-    if (param.figure == 1):
+    if (param.condition == 1):
         stimulus = (np.random.rand(info[NS_X], info[NS_Y]) > .5)
 #        stimulus = (np.random.rand(64, 64) > .5)
-    elif (param.figure == 2):
+    elif (param.condition == 2):
         im = Image(ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.', 'datapath':'database/', 'do_mask':False, 'seed':None}))
         stimulus, filename, croparea = im.patch(name_database)
 #         stimulus = lena()
@@ -31,19 +31,19 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
         stimulus = rectif(stimulus, contrast=1.)
     else:
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
-        if (param.figure == 3):
+        if (param.condition == 3):
             t, b, B_sf = 0, np.pi/32, 0.1
-        if (param.figure == 4):
+        if (param.condition == 4):
             t, b, B_sf = 0, np.pi/8, 0.1
-        if (param.figure == 5):
+        if (param.condition == 5):
             t, b, B_sf = 0, np.pi/2, 0.1
-        if (param.figure == 6):
+        if (param.condition == 6):
             t, b, B_sf = np.pi/4, np.pi/32, 0.1
-        if (param.figure == 7):
+        if (param.condition == 7):
             t, b, B_sf = np.pi/2, np.pi/32, 0.1
-        if (param.figure == 8):
+        if (param.condition == 8):
             t, b, B_sf = 0, np.pi/32, 0.01
-        if (param.figure == 9):
+        if (param.condition == 9):
             t, b, B_sf = 0, np.pi/32, 1
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
         cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, B_sf=B_sf, theta=t, B_theta=b, B_V=1000.))
@@ -76,7 +76,7 @@ def presentStimulus(win, stimulus, param, info, do_mask=True):
         img1 = stim(stimulus)
         img2 = stim(im.translate(stimulus, [param.shift, 0]))
 
-    if param.contrast == -1:
+    if param.toss == -1:
         img2 = 255 - img2
 
     if do_mask:
@@ -102,7 +102,7 @@ def get_reponse(win):
 
 class parameters():
     def __init__(self, exp):#, shift_range):
-        self.contrast = lb.toss()
+        self.toss = lb.toss()
 #         self.shift = (np.random.rand()*2 - 1) * shift_range
         self.shift = 0
         if (exp == 'default'):
@@ -113,7 +113,7 @@ class parameters():
             a = [3, 6, 7]
         if (exp == 'B_sf'):
             a = [3, 8, 9]
-        self.figure = a[np.random.randint(3)]
+        self.condition = a[np.random.randint(3)]
 
 def trials(win, info, exp):
     import time
@@ -132,9 +132,9 @@ def trials(win, info, exp):
         t1 = time.time()
         delay = t1 - t0
         results[0, i_trial] = ans
-        results[1, i_trial] = param.contrast
+        results[1, i_trial] = param.toss
         results[2, i_trial] = param.shift
         results[3, i_trial] = delay
-        results[4, i_trial] = param.figure
-        print "essai numero %d, figure %d, contrast = %d, shift = %f, answer = %d, delay = %f" % (i_trial, param.figure, param.contrast, param.shift, ans, delay)
+        results[4, i_trial] = param.condition
+        print "essai numero %d, condition %d, toss = %d, shift = %f, answer = %d, delay = %f" % (i_trial, param.condition, param.toss, param.shift, ans, delay)
     return(results)
