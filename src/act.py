@@ -28,11 +28,23 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
         stimulus = np.rot90(np.fliplr(stimulus))
         stimulus = mc.rectif(stimulus, contrast=1.)
     else:
-        b = [np.pi/2, np.pi/8, np.pi/32]
-        #b = a[param.figure - 3]
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
-        #cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft))
-        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, B_theta=b[param.figure-3], B_V=1000.))
+        if (param.figure == 3):
+            t, b, sf = 0, np.pi/32, 0.1
+        if (param.figure == 4):
+            t, b, sf = 0, np.pi/8, 0.1
+        if (param.figure == 5):
+            t, b, sf = 0, np.pi/2, 0.1
+        if (param.figure == 6):
+            t, b, sf = np.pi/4, np.pi/32, 0.1
+        if (param.figure == 7):
+            t, b, sf = np.pi/2, np.pi/32, 0.1
+        if (param.figure == 8):
+            t, b, sf = 0, np.pi/32, 0.01
+        if (param.figure == 9):
+            t, b, sf = 0, np.pi/32, 1
+        fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
+        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, B_sf=sf, theta=t, B_theta=b, B_V=1000.))
         cloud = mc.rectif(cloud, contrast=1.)
         stimulus = cloud[:, :, 0]
 
@@ -86,19 +98,29 @@ def get_reponse(win):
         ans = reponse(event)
     return (ans)
 
-class parameters:
-    def __init__(self):#, shift_range):
+class parameters():
+    def __init__(self, exp):#, shift_range):
         self.contrast = lb.toss()
 #         self.shift = (np.random.rand()*2 - 1) * shift_range
-        self.figure = np.random.randint(5) + 1
+        self.shift = 0
+        if (exp == 'default'):
+            a = [1, 2, 3]
+        if (exp == 'B_theta'):
+            a = [3, 4, 5]
+        if (exp == 'theta'):
+            a = [3, 6, 7]
+        if (exp == 'B_sf'):
+            a = [3, 8, 9]
+        self.figure = a[np.random.randint(3)]
 
-def trials(win, info):
+def trials(win, info, exp):
     import time
     shifts = np.linspace(-shift_range, shift_range, info[nTrials])
     shifts = np.random.permutation(shifts)
     results = np.zeros((5, info[nTrials]))
     for i_trial in range(info[nTrials]):
-        param = parameters()#info[shift_range])
+        param = parameters(exp)
+        param.shift = shifts[i_trial]
         stimulus = creation_stimulus(info, win.screen, param)
         wait(win, info[wait_stimulus])
         presentStimulus(win, stimulus, param, info)
@@ -108,7 +130,7 @@ def trials(win, info):
         delay = t1 - t0
         results[0, i_trial] = ans
         results[1, i_trial] = param.contrast
-        results[2, i_trial] = shifts[i_trial]
+        results[2, i_trial] = param.shift
         results[3, i_trial] = delay
         results[4, i_trial] = param.figure
         print "essai numero %d, figure %d, contrast = %d, shift = %f, answer = %d, delay = %f" % (i_trial, param.figure, param.contrast, param.shift, ans, delay)
