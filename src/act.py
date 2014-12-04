@@ -16,6 +16,8 @@ def stim(stim):
 
 def creation_stimulus(info, screen, param, name_database='blackwhite'):
     import MotionClouds as mc
+    from MotionClouds.display import rectif
+
 #   from libpy import lena
 
     if (param.figure == 1):
@@ -26,26 +28,26 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
         stimulus, filename, croparea = im.patch(name_database)
 #         stimulus = lena()
         stimulus = np.rot90(np.fliplr(stimulus))
-        stimulus = mc.rectif(stimulus, contrast=1.)
+        stimulus = rectif(stimulus, contrast=1.)
     else:
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
         if (param.figure == 3):
-            t, b, sf = 0, np.pi/32, 0.1
+            t, b, B_sf = 0, np.pi/32, 0.1
         if (param.figure == 4):
-            t, b, sf = 0, np.pi/8, 0.1
+            t, b, B_sf = 0, np.pi/8, 0.1
         if (param.figure == 5):
-            t, b, sf = 0, np.pi/2, 0.1
+            t, b, B_sf = 0, np.pi/2, 0.1
         if (param.figure == 6):
-            t, b, sf = np.pi/4, np.pi/32, 0.1
+            t, b, B_sf = np.pi/4, np.pi/32, 0.1
         if (param.figure == 7):
-            t, b, sf = np.pi/2, np.pi/32, 0.1
+            t, b, B_sf = np.pi/2, np.pi/32, 0.1
         if (param.figure == 8):
-            t, b, sf = 0, np.pi/32, 0.01
+            t, b, B_sf = 0, np.pi/32, 0.01
         if (param.figure == 9):
-            t, b, sf = 0, np.pi/32, 1
+            t, b, B_sf = 0, np.pi/32, 1
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
-        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, B_sf=sf, theta=t, B_theta=b, B_V=1000.))
-        cloud = mc.rectif(cloud, contrast=1.)
+        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, B_sf=B_sf, theta=t, B_theta=b, B_V=1000.))
+        cloud = rectif(cloud, contrast=1.)
         stimulus = cloud[:, :, 0]
 
     return (stimulus)
