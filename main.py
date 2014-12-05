@@ -19,8 +19,6 @@ while (True):
     exp = expT[i]
     fileName = fileSave(experiment, info[observer], info)
     window = tools.init(info, experiment)
-    #name = Dlg2()
-    #fileName = fileName + name
     fileName = startend.intro(window, experiment, fileName)
     results = act.trials(window, info, exp)
     startend.end(window)
