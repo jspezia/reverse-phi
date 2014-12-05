@@ -66,7 +66,7 @@ def fileSave(experiment, observer, info):
     #fileName = psy.fileSaveDlg(initFilePath = "", initFileName = fileName)
     if not isinstance(fileName, unicode):
         sys.exit()
-    psy.toFile((fileName + '.pickle'), info)
+    #psy.toFile((fileName + '.pickle'), info)
     return(fileName)
 
 def wait(win, wait_stimulus):

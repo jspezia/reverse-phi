@@ -51,7 +51,7 @@ def intro(win, experiment):
     while looping:
         pygame.display.flip()
         event = pygame.event.poll()
-        looping = quit(event)
+        #looping = quit(event)
         if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_RETURN):
             looping = False
     win.background.fill(RGB.Gray)
