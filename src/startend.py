@@ -39,8 +39,9 @@ def weneedyou(win):
     win.screen.blit(win.background, (0, 0))
     return
 
-def intro(win, experiment):
+def intro(win, experiment, fileName):
     weneedyou(win)
+    fileName += '_' + Dlg2()
     win.background = textedit(win.background, experiment, 1)
     win.background = textedit(win.background, 'For each tries, you need to determine which way the presented image has moved.', 3)
     win.background = textedit(win.background, 'Use the arrow keys (left and right) to make your choice.', 4)
@@ -56,7 +57,7 @@ def intro(win, experiment):
             looping = False
     win.background.fill(RGB.Gray)
     win.screen.blit(win.background, (0, 0))
-    return
+    return (fileName)
 
 def end(win):
     from pygame import transform

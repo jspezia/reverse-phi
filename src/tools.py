@@ -62,10 +62,11 @@ def fileSave(experiment, observer, info):
     info_time = {}
     info_time['timeStr'] = time.strftime("%d_%b_%Hh%M", time.localtime())
     dirName = 'ALL/'
-    fileName = dirName + experiment + '_' + observer + '_' + info_time['timeStr']
+    #fileName = dirName + experiment + '_' + observer + '_' + info_time['timeStr']
+    fileName = dirName + experiment + '_' + info_time['timeStr']
     #fileName = psy.fileSaveDlg(initFilePath = "", initFileName = fileName)
-    if not isinstance(fileName, unicode):
-        sys.exit()
+    #if not isinstance(fileName, unicode):
+    #    sys.exit()
     #psy.toFile((fileName + '.pickle'), info)
     return(fileName)
 
@@ -99,6 +100,17 @@ def reponse(event):
         if (event.key == pygame.K_RIGHT): reponse = 1
         if (event.key == pygame.K_LEFT): reponse = -1
     return (reponse)
+
+def Dlg2():
+    name = 'anonymous'
+    myDlg = psy.Dlg(title="info")
+    myDlg.addField('Please enter your name or email:', name)
+    myDlg.show()
+    if myDlg.OK:
+        info = myDlg.data
+        ret = info[0]
+    else: ret = 'anonymous'
+    return(ret)
 
 def Dlg():
     observer = 'none'
