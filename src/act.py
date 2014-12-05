@@ -113,17 +113,22 @@ class parameters():
             a = [3, 6, 7]
         if (exp == 'B_sf'):
             a = [3, 8, 9]
-        self.condition = a[np.random.randint(3)]
+        index = np.random.randint(3)
+        self.condition = a[index]
+        self.shift_ = index
 
 def trials(win, info, exp):
     import time
     shift_r = info[shift_range]
-    shifts = np.linspace(-shift_r, shift_r, info[nTrials])
-    shifts = np.random.permutation(shifts)
+    shifts = []
+    for i in range(3):
+        shifts_ = np.linspace(-shift_r, shift_r, info[nTrials])
+        shifts_ = np.random.permutation(shifts_)
+        shifts.append(shifts_)
     results = np.zeros((5, info[nTrials]))
     for i_trial in range(info[nTrials]):
         param = parameters(exp)
-        param.shift = shifts[i_trial]
+        param.shift = shifts[param.shift_][i_trial]
         stimulus = creation_stimulus(info, win.screen, param)
         wait(win, info[wait_stimulus])
         presentStimulus(win, stimulus, param, info)
