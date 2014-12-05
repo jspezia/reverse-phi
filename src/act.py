@@ -101,34 +101,35 @@ def get_reponse(win):
     return (ans)
 
 class parameters():
-    def __init__(self, exp):#, shift_range):
+    def __init__(self, exp, shift):#, shift_range):
         self.flip = lb.toss()
 #         self.shift = (np.random.rand()*2 - 1) * shift_range
-        self.shift = 0
-        if (exp == 'default'):
-            a = [1, 2, 3]
-        if (exp == 'B_theta'):
-            a = [3, 4, 5]
-        if (exp == 'theta'):
-            a = [3, 6, 7]
-        if (exp == 'B_sf'):
-            a = [3, 8, 9]
-        index = np.random.randint(3)
+        if (exp == 'default'): a = [1, 2, 3]
+        elif (exp == 'B_theta'): a = [3, 4, 5]
+        elif (exp == 'theta'): a = [3, 6, 7]
+        elif (exp == 'B_sf'): a = [3, 8, 9]
+        if (abs(shift) - int(abs(shift)) < 0.334): index = 0
+        elif (abs(shift) - int(abs(shift)) < 0.667): index = 1
+        else: index = 2
+#        index = np.random.randint(3)
         self.condition = a[index]
-        self.shift_ = index
+#        self.shift_ = index
+        self.shift = shift
 
 def trials(win, info, exp):
     import time
     shift_r = info[shift_range]
-    shifts = []
-    for i in range(3):
-        shifts_ = np.linspace(-shift_r, shift_r, info[nTrials])
-        shifts_ = np.random.permutation(shifts_)
-        shifts.append(shifts_)
+    shifts_ = np.linspace(-shift_r, shift_r, info[nTrials])
+    shifts_ = np.random.permutation(shifts_)
+#    shifts = []
+#    for i in range(3):
+#        shifts_ = np.linspace(-shift_r, shift_r, info[nTrials])
+#        shifts_ = np.random.permutation(shifts_)
+#        shifts.append(shifts_)
     results = np.zeros((5, info[nTrials]))
     for i_trial in range(info[nTrials]):
-        param = parameters(exp)
-        param.shift = shifts[param.shift_][i_trial]
+        param = parameters(exp, shifts_[i_trial])
+#        param.shift = shifts[param.shift_][i_trial]
         stimulus = creation_stimulus(info, win.screen, param)
         wait(win, info[wait_stimulus])
         presentStimulus(win, stimulus, param, info)
