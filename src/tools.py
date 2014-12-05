@@ -120,7 +120,7 @@ def Dlg():
     N_Y = 512
     NS_X = 512
     NS_Y = 512
-    nTrials = 10
+    nTrials = 150
     figure = 2
     wait_stimulus = 0.1
     duration_image = .2
