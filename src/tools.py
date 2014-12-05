@@ -74,7 +74,10 @@ def wait(win, wait_stimulus):
     from startend import textedit
 
     win.background.fill(RGB.Gray)
-    textedit(win.background, '+', 4)
+    font = pygame.font.Font(None, 36)
+    text = font.render('+', True, RGB.Black)
+    textpos = text.get_rect(center=(win.background.get_width()/2, win.background.get_height()/2-3))
+    win.background.blit(text, textpos)
     win.screen.blit(win.background, (0, 0))
     pygame.display.flip()
     time.sleep(wait_stimulus)
