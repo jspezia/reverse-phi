@@ -21,7 +21,7 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
 #   from libpy import lena
 
     if (param.condition == 1):
-        stimulus = (np.random.rand(info[NS_X], info[NS_Y]) > .5)
+        stimulus = (np.random.rand(info[NS_X]/4, info[NS_Y]/4) > .5)
 #        stimulus = (np.random.rand(64, 64) > .5)
     elif (param.condition == 2):
         im = Image(ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.', 'datapath':'database/', 'do_mask':False, 'seed':None}))
@@ -46,7 +46,7 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
         if (param.condition == 9):
             t, b, B_sf, sf_0= 0, np.pi/32, 0.5, 0.15
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
-        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, sf_0=sf_0 B_sf=B_sf, theta=t, B_theta=b, B_V=1000.))
+        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, sf_0=sf_0, B_sf=B_sf, theta=t, B_theta=b, B_V=1000.))
         cloud = rectif(cloud, contrast=1.)
         stimulus = cloud[:, :, 0]
 
@@ -67,7 +67,9 @@ def winblit(img, win, info):
 
 def presentStimulus(win, stimulus, param, info, do_mask=True):
     import time
-    pe = ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.'})
+    if (param.condition == 1):
+        pe = ParameterSet({'N_X' : info[NS_X]/4, 'N_Y' : info[NS_Y]/4, 'figpath':'.', 'matpath':'.'})
+    else: pe = ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.'})
     im = Image(pe)
     if (stimulus.ndim == 3):
         img1 = stim(stimulus[:, :, 0])
@@ -80,7 +82,9 @@ def presentStimulus(win, stimulus, param, info, do_mask=True):
         img2 = 255 - img2
 
     if do_mask:
-        im = Image(ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.'}))
+        if (param.condition == 1):
+            im = Image(ParameterSet({'N_X' : info[NS_X]/4, 'N_Y' : info[NS_Y]/4, 'figpath':'.', 'matpath':'.'}))
+        else: im = Image(ParameterSet({'N_X' : info[NS_X], 'N_Y' : info[NS_Y], 'figpath':'.', 'matpath':'.'}))
         mask = im.mask[:, :, np.newaxis]
         img1 = ((img1 - 127)*mask + 127).astype(int)
         img2 = ((img2 - 127)*mask + 127).astype(int)
