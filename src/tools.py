@@ -127,7 +127,7 @@ def Dlg():
     figure = 2
     wait_stimulus = 0.1
     duration_image = .04
-    shift_range = 20.
+    shift_range = 30.
     myDlg = psy.Dlg(title="Reverse-phi's experiment")
     myDlg.addText('Subject Info')
     myDlg.addField('observer', observer)
