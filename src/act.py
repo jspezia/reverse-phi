@@ -42,7 +42,7 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
         if (param.condition == 7):
             t, b, B_sf = np.pi/2, np.pi/32, 0.1
         if (param.condition == 8):
-            t, b, B_sf = 0, np.pi/32, 0.05
+            t, b, B_sf = 0, np.pi/32, 0.25
         if (param.condition == 9):
             t, b, B_sf = 0, np.pi/32, 0.5
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
