@@ -32,21 +32,21 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
     else:
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
         if (param.condition == 3):
-            t, b, B_sf = 0, np.pi/32, 0.1
+            t, b, B_sf, sf_0 = 0, np.pi/32, 0.1, 0.15
         if (param.condition == 4):
-            t, b, B_sf = 0, np.pi/8, 0.1
+            t, b, B_sf, sf_0= 0, np.pi/8, 0.1, 0.15
         if (param.condition == 5):
-            t, b, B_sf = 0, np.pi/2, 0.1
+            t, b, B_sf, sf_0= 0, np.pi/2, 0.1, 0.15
         if (param.condition == 6):
-            t, b, B_sf = np.pi/4, np.pi/32, 0.1
+            t, b, B_sf, sf_0= 0, np.pi/32, 0.1, 0.30
         if (param.condition == 7):
-            t, b, B_sf = np.pi/2, np.pi/32, 0.1
+            t, b, B_sf, sf_0= 0, np.pi/32, 0.1, 0.075
         if (param.condition == 8):
-            t, b, B_sf = 0, np.pi/32, 0.25
+            t, b, B_sf, sf_0= 0, np.pi/32, 0.25, 0.15
         if (param.condition == 9):
-            t, b, B_sf = 0, np.pi/32, 0.5
+            t, b, B_sf, sf_0= 0, np.pi/32, 0.5, 0.15
         fx, fy, ft = mc.get_grids(info[NS_X], info[NS_Y], 1)
-        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, B_sf=B_sf, theta=t, B_theta=b, B_V=1000.))
+        cloud = mc.random_cloud(mc.envelope_gabor(fx, fy, ft, sf_0=sf_0 B_sf=B_sf, theta=t, B_theta=b, B_V=1000.))
         cloud = rectif(cloud, contrast=1.)
         stimulus = cloud[:, :, 0]
 
