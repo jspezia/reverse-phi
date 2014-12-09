@@ -123,10 +123,10 @@ def Dlg():
     N_Y = 512
     NS_X = 512
     NS_Y = 512
-    nTrials = 150
+    nTrials = 600
     figure = 2
     wait_stimulus = 0.1
-    duration_image = .04
+    duration_image = .05
     shift_range = 30.
     myDlg = psy.Dlg(title="Reverse-phi's experiment")
     myDlg.addText('Subject Info')

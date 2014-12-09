@@ -38,7 +38,7 @@ def creation_stimulus(info, screen, param, name_database='blackwhite'):
         if (param.condition == 5):
             t, b, B_sf, sf_0= 0, np.pi/2, 0.1, 0.15
         if (param.condition == 6):
-            t, b, B_sf, sf_0= 0, np.pi/32, 0.1, 0.30
+            t, b, B_sf, sf_0= 0, np.pi/32, 0.1, 0.03
         if (param.condition == 7):
             t, b, B_sf, sf_0= 0, np.pi/32, 0.1, 0.075
         if (param.condition == 8):

@@ -12,7 +12,7 @@ experiment = 'Reverse-phi-experiment'
 #	sys.exit("set argv[1] to \'default\', \'B_theta\', \'theta\' or \'B_sf\'")
 
 expT = ['default', 'B_theta', 'theta', 'B_sf']
-i = 0
+i = 3
 
 info = Dlg()
 while (True):
