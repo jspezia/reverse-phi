@@ -35,7 +35,11 @@ def init(info, experiment):
     window = win(background, screen)
     return (window)
 
-def saveResults(fileName, results, ext='.csv'):
+def saveResults(fileName, results, duration, ext='.csv'):
+    import os
+
+    figpath = 'ALL/' + str(duration * 1000) + 'ms/'
+    if not(os.path.isdir(figpath)): os.mkdir(figpath)
     if (ext == '.npy'):
         import numpy
         numpy.save((fileName + '.npy'), results)
@@ -49,15 +53,20 @@ def saveResults(fileName, results, ext='.csv'):
     figure = results[4][:]
     Pd_results = zip(ans, contrast, shift, delay, figure)
     df = pd.DataFrame(data = Pd_results, columns=['ans', 'contrast', 'shift', 'delay', 'figure'])
+    fileName = figpath + fileName
     df.to_csv((fileName + '.csv'), index=False, header=True)
+
+def fileSave2():
+    info_time = {}
+    info_time['timeStr'] = time.strftime("%d_%b_%Hh%M", time.localtime())
+    fileName = info_time['timeStr'] + '_'
+    return(fileName)
 
 def fileSave(experiment, observer, info):
     """
     save info as 'experiment_observer_00_Jan_00h00.npy'
     and return a fileName without .ext
     """
-    import time
-    import sys
 
     info_time = {}
     info_time['timeStr'] = time.strftime("%d_%b_%Hh%M", time.localtime())
@@ -125,7 +134,7 @@ def Dlg():
     NS_Y = 512
     nTrials = 600
     figure = 2
-    wait_stimulus = 0.1
+    wait_stimulus = 0.2
     duration_image = .05
     shift_range = 30.
     myDlg = psy.Dlg(title="Reverse-phi's experiment")

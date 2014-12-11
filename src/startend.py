@@ -41,7 +41,7 @@ def weneedyou(win):
 
 def intro(win, experiment, fileName):
     weneedyou(win)
-    fileName += '_' + Dlg2()
+    fileName += Dlg2()
     win.background = textedit(win.background, experiment, 1)
     win.background = textedit(win.background, 'For each tries, you need to determine which way the presented image has moved.', 3)
     win.background = textedit(win.background, 'Use the arrow keys (left and right) to make your choice.', 4)
